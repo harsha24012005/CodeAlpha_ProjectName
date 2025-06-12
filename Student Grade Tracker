@@ -1,1 +1,62 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Student {
+    String name;
+    double grade;
+
+    public Student(String name, double grade) {
+        this.name = name;
+        this.grade = grade;
+    }
+}
+
+public class Main {  // <-- Changed from StudentGradeTracker to Main
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        ArrayList<Student> studentList = new ArrayList<>();
+
+        System.out.println("Welcome to the Student Grade Tracker!");
+
+        System.out.print("Enter the number of students: ");
+        int numberOfStudents = input.nextInt();
+        input.nextLine();
+
+        for (int i = 1; i <= numberOfStudents; i++) {
+            System.out.println("\nStudent " + i + ":");
+            System.out.print("Enter name: ");
+            String name = input.nextLine();
+
+            System.out.print("Enter grade: ");
+            double grade = input.nextDouble();
+            input.nextLine();
+
+            studentList.add(new Student(name, grade));
+        }
+
+        double totalGrades = 0;
+        double highestGrade = Double.MIN_VALUE;
+        double lowestGrade = Double.MAX_VALUE;
+
+        for (Student s : studentList) {
+            totalGrades += s.grade;
+            if (s.grade > highestGrade) highestGrade = s.grade;
+            if (s.grade < lowestGrade) lowestGrade = s.grade;
+        }
+
+        double averageGrade = totalGrades / numberOfStudents;
+
+        System.out.println("\n========== Student Report ==========");
+        for (Student s : studentList) {
+            System.out.printf("Name: %-15s Grade: %.2f\n", s.name, s.grade);
+        }
+
+        System.out.println("------------------------------------");
+        System.out.printf("Average Grade: %.2f\n", averageGrade);
+        System.out.printf("Highest Grade: %.2f\n", highestGrade);
+        System.out.printf("Lowest Grade: %.2f\n", lowestGrade);
+
+        input.close();
+    }
+}
 
