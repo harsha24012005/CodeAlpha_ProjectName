@@ -1,0 +1,100 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Stock {
+    String name;
+    int quantity;
+    double pricePerShare;
+
+    public Stock(String name, int quantity, double pricePerShare) {
+        this.name = name;
+        this.quantity = quantity;
+        this.pricePerShare = pricePerShare;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        ArrayList<Stock> portfolio = new ArrayList<>();
+        double balance = 10000.00; // Starting balance
+
+        while (true) {
+            System.out.println("\n==== Stock Trading Menu ====");
+            System.out.println("1. Buy Stock");
+            System.out.println("2. Sell Stock");
+            System.out.println("3. View Portfolio");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+            int choice = input.nextInt();
+            input.nextLine(); // clear newline
+
+            switch (choice) {
+                case 1:
+                    // Buy
+                    System.out.print("Enter stock name to buy: ");
+                    String name = input.nextLine();
+                    System.out.print("Enter quantity: ");
+                    int qty = input.nextInt();
+                    System.out.print("Enter price per share: ");
+                    double price = input.nextDouble();
+                    input.nextLine();
+
+                    double cost = qty * price;
+                    if (cost > balance) {
+                        System.out.println("Not enough balance to complete purchase.");
+                    } else {
+                        balance -= cost;
+                        portfolio.add(new Stock(name, qty, price));
+                        System.out.println("Stock purchased successfully.");
+                    }
+                    break;
+
+                case 2:
+                    // Sell
+                    System.out.print("Enter stock name to sell: ");
+                    String sellName = input.nextLine();
+                    boolean sold = false;
+
+                    for (int i = 0; i < portfolio.size(); i++) {
+                        Stock stock = portfolio.get(i);
+                        if (stock.name.equalsIgnoreCase(sellName)) {
+                            double value = stock.quantity * stock.pricePerShare;
+                            balance += value;
+                            portfolio.remove(i);
+                            System.out.println("Sold " + stock.quantity + " shares of " + stock.name + " for ₹" + value);
+                            sold = true;
+                            break;
+                        }
+                    }
+
+                    if (!sold) {
+                        System.out.println("You don't own that stock.");
+                    }
+                    break;
+
+                case 3:
+                    // View Portfolio
+                    System.out.println("\nYour Balance: ₹" + balance);
+                    if (portfolio.isEmpty()) {
+                        System.out.println("You don’t own any stocks.");
+                    } else {
+                        System.out.println("Your Stocks:");
+                        for (Stock s : portfolio) {
+                            System.out.println("- " + s.name + ": " + s.quantity + " shares @ ₹" + s.pricePerShare);
+                        }
+                    }
+                    break;
+
+                case 4:
+                    // Exit
+                    System.out.println("Thank you for using the Stock Trading Platform!");
+                    input.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
